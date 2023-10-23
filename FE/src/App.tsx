@@ -1,5 +1,5 @@
 // import React, { useState, useEffect } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Intro from "./pages/Intro";
 
 function App() {

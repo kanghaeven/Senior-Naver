@@ -1,4 +1,4 @@
-import { Dollar } from "./components/dollar";
+import { Dollar } from "./components/Dollar";
 
 test("JEST 곱셈 테스트", () => {
   const dollar = new Dollar(5);
