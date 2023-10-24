@@ -2,6 +2,7 @@ import { Container as MapDiv, NaverMap, Marker, useNavermaps } from "react-naver
 import { styled } from "styled-components";
 import useGeolocation from "../hooks/useGeolocation";
 import { useState } from "react";
+import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
 
 const screenWidth = window.screen.width;
 const screenHeight = window.screen.height;
@@ -59,14 +60,16 @@ const DrawableButton = styled.button`
   z-index: 10;
   overflow: hidden;
   display: inline-block;
-  font-size: 20px;
   color: black;
   line-height: 1px;
   vertical-align: top;
-  background-position: -339px -50px;
+  background-image: IoIosArrowBack;
+  height: 80px;
   width: fit-content;
-  height: 49px;
+  padding: 10px;
   -webkit-mask-image: none;
+  border: 1px solid lightgray;
+  border-radius: 0px 5px 5px 0px;
 `;
 function Places() {
   const navermaps = useNavermaps();
@@ -124,7 +127,9 @@ function Places() {
             </PlacesWrapper>
           </ContentsWrapper>
         </Drawable>
-        <DrawableButton onClick={handleDrawable}>{showDrawable ? "<" : ">"}</DrawableButton>
+        <DrawableButton onClick={handleDrawable}>
+          {showDrawable ? <MdArrowBackIosNew /> : <MdArrowForwardIos />}
+        </DrawableButton>
       </DrawableWrapper>
     </>
   );
