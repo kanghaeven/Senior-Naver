@@ -5,3 +5,7 @@ services:
       context: ./FE
     ports:
       - 80:80
+      - 443:443
+    volumes:
+      - /var/log/nginx:/var/log/nginx
+      - /etc/letsencrypt:/etc/letsencrypt
