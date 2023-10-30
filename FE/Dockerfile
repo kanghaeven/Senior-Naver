@@ -7,4 +7,3 @@ COPY /dist /usr/share/nginx/html
 RUN ls -al /etc
 
 EXPOSE 80
-# ENTRYPOINT ["nginx", "-g"]
