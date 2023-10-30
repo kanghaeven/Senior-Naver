@@ -2,6 +2,6 @@ version: "3"
 services:
   nginx:
     build:
-      context: ./frontend
+      context: ./FE
     ports:
       - 80:80
