@@ -16,7 +16,7 @@
 <div>
   <h2>프로젝트 소개</h2>
 </div>
-시니어가 디지털 시대에 쉽게 적응할 수
+시니어가 디지털 시대에 쉽게 적응할 수 있도록 맞춤형 정보제공 웹 서비스스
 
 <br />
 
@@ -85,15 +85,6 @@
 <br /><br />
 
 ### 5. 아랫 세대와의 간극을 좁혀줄 **유행어 사전**
-
-<br />
-<div align="center">
-  <img src="https://github.com/yms1789/Algorithm/assets/71623879/2b9ff3d8-29bb-4e44-8ded-de42f37ab0a5" width="80%" />
-</div>
-
-<br /><br />
-
-### 6. MZ 사전
 
 <br />
 <div align="center">
