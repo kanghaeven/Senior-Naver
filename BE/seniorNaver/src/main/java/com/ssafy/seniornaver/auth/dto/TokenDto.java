@@ -9,6 +9,6 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor @AllArgsConstructor
 public class TokenDto {
-    public String token;
+    public String accessToken;
     public Date tokenExpirationTime;
 }

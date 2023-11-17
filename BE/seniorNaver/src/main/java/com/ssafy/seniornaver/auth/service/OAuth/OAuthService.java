@@ -30,11 +30,11 @@ public class OAuthService {
     }
 
     public OAuthSignInResponse refreshToken(TokenRequest tokenRequest){
-        String userId = (String) jwtProvider.get(tokenRequest.getRefreshToken()).get("userId");
+        String memberId = (String) jwtProvider.get(tokenRequest.getRefreshToken()).get("memberId");
         String provider = (String) jwtProvider.get(tokenRequest.getRefreshToken()).get("provider");
         String oldRefreshToken = (String) jwtProvider.get(tokenRequest.getRefreshToken()).get("refreshToken");
 
-        if(!memberRepository.existsByMemberIdAndAuthProvider(userId, AuthProvider.findByCode(provider.toLowerCase()))){
+        if(!memberRepository.existsByMemberIdAndAuthProvider(memberId, AuthProvider.findByCode(provider.toLowerCase()))){
             throw new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID);
         }
 
@@ -44,11 +44,11 @@ public class OAuthService {
         }
         // access 토큰 생성
         TokenDto accessTokenDto = jwtProvider.createAccessToken(
-                userId, AuthProvider.findByCode(provider.toLowerCase()));
+                memberId, AuthProvider.findByCode(provider.toLowerCase()));
 
         return OAuthSignInResponse.builder()
                 .authProvider(AuthProvider.findByCode(provider.toLowerCase()))
-                .accessToken(accessTokenDto.getToken())
+                .accessToken(accessTokenDto.getAccessToken())
                 .refreshToken(null)
                 .build();
     }

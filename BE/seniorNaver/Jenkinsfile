@@ -12,7 +12,7 @@ pipeline {
                     '''
                     deleteDir()
                 }
-                checkout scmGit(branches: [[name: '*/master']], 
+                checkout scmGit(branches: [[name: '*/BE']], 
                 extensions: [submodule(recursiveSubmodules: true, reference: '', trackingSubmodules: true)],
                 userRemoteConfigs: [
                     [credentialsId: 'submodule', url: 'https://lab.ssafy.com/kwmw0427/yml.git'],

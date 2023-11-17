@@ -1,6 +1,10 @@
 package com.ssafy.seniornaver.auth.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.seniornaver.error.code.ErrorCode;
+import com.ssafy.seniornaver.error.exception.CustomAuthenticationException;
+import com.ssafy.seniornaver.error.response.ErrorResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -10,46 +14,62 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
 @Component
+@Slf4j
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
 
-        String exception = (String) request.getAttribute("Authorization");
-        String errorCode;
+// CustomAuthenticationException 처리
+        if (authException instanceof CustomAuthenticationException) {
+            CustomAuthenticationException e = (CustomAuthenticationException) authException;
 
-        if (exception.equals("토큰이 만료되었습니다.")) {
-            errorCode = "토큰이 만료되었습니다.";
-            final Map<String, Object> body = new HashMap<>();
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            // 에러 메시지를 ErrorResponse로 변환
+            ErrorCode errorCode = e.getErrorCode();
+            ErrorResponse errorResponse = ErrorResponse.of(
+                    errorCode.getHttpStatus().toString(),
+                    errorCode.getErrorCode(),
+                    errorCode.getMessage()
+            );
+            response.setStatus(errorCode.getHttpStatus().value());
+            response.setContentType("application/json");
 
-            body.put("status", 403);
-            body.put("error", "Expired");
-            body.put("message", errorCode);
-            body.put("path", request.getServletPath());
-            final ObjectMapper mapper = new ObjectMapper();
+            // 에러 메시지를 JSON으로 변환
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonErrorResponse = mapper.writeValueAsString(errorResponse);
 
-            mapper.writeValue(response.getOutputStream(), body);
-            response.setStatus(HttpServletResponse.SC_OK);
+            // 에러 메시지를 응답에 작성
+            PrintWriter out = response.getWriter();
+            out.print(jsonErrorResponse);
+
+            return;
         }
 
-        if (exception.equals("유효하지 않은 토큰입니다.")) {
-            errorCode = "유효하지 않은 토큰입니다.";
-            final Map<String, Object> body = new HashMap<>();
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        // 기타 AuthenticationException 처리
+        if (authException != null) {
+            ErrorCode errorCode = ErrorCode.NOT_VALID_TOKEN;
+            ErrorResponse errorResponse = ErrorResponse.of(
+                    errorCode.getHttpStatus().toString(),
+                    errorCode.getErrorCode(),
+                    errorCode.getMessage()
+            );
+            response.setStatus(errorCode.getHttpStatus().value());
+            response.setContentType("application/json");
 
-            body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-            body.put("error", "Unauthorized");
-            body.put("message", errorCode);
-            body.put("path", request.getServletPath());
-            final ObjectMapper mapper = new ObjectMapper();
+            // 에러 메시지를 JSON으로 변환
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonErrorResponse = mapper.writeValueAsString(errorResponse);
 
-            mapper.writeValue(response.getOutputStream(), body);
-            response.setStatus(HttpServletResponse.SC_OK);
+            // 에러 메시지를 응답에 작성
+            PrintWriter out = response.getWriter();
+            out.print(jsonErrorResponse);
+
+            return;
         }
     }
     private void setResponse(HttpServletResponse response, String errorCode) throws IOException {

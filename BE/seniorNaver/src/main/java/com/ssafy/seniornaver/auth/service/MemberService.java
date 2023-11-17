@@ -1,18 +1,26 @@
 package com.ssafy.seniornaver.auth.service;
 
-import com.ssafy.seniornaver.auth.dto.LogInRequestDto;
-import com.ssafy.seniornaver.auth.dto.LogInResponseDto;
-import com.ssafy.seniornaver.auth.dto.LogOutRequestDto;
-import com.ssafy.seniornaver.auth.dto.SignUpRequestDto;
+import com.ssafy.seniornaver.auth.dto.Request.*;
+import com.ssafy.seniornaver.auth.dto.Response.LogInResponseDto;
+import com.ssafy.seniornaver.auth.dto.Response.MemberResponseDto;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 public interface MemberService {
     String signUp(SignUpRequestDto signUpRequestDto);
 
     LogInResponseDto logIn(LogInRequestDto logInRequestDto);
 
-    Boolean validUserId(String userId);
+    Boolean validMemberId(String memberId);
 
     Boolean validNickname(String nickname);
 
-    void logOut(LogOutRequestDto logOutRequestDto);
+    MemberResponseDto getMemberInfo(String memberId);
+
+    String addDetails(DetailRequestDto DetailRequestDto, MultipartFile file) throws IOException;
+
+    void logOut(String token);
+
+    void deleteUser(String memberId);
 }

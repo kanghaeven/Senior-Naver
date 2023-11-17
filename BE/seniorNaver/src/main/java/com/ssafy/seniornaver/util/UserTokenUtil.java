@@ -16,9 +16,9 @@ public class UserTokenUtil {
 
     public Member getUser(HttpServletRequest httpServletRequest) {
         String bearer = httpServletRequest.getHeader("Authorization").substring(7);
-        String userId = (String) jwtProvider.get(bearer).get("userId");
+        String memberId = (String) jwtProvider.get(bearer).get("memberId");
 
-        Member member = memberRepository.findByMemberId(userId).orElseThrow(() -> {
+        Member member = memberRepository.findByMemberId(memberId).orElseThrow(() -> {
             return new IllegalArgumentException("유저 ID를 찾을수 없습니다.");
         });
         return member;

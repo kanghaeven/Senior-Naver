@@ -8,16 +8,21 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class Member{
+public class Member implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false,unique = true)
     private String memberId;
 
-    @Column(nullable = false)
+    @Column
     private String mobile;
 
     @Column(nullable = false)
@@ -26,14 +31,17 @@ public class Member{
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column
     private String nickname;
 
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column
     private String region;
+
+    @Column
+    private String profileUrl;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -46,13 +54,17 @@ public class Member{
     @Column(length = 300)
     private String refreshToken;
 
+    @Column
     private Date tokenExpirationTime;
 
+    @Column
+    private Long vocaId;
 
     @Builder
-    public Member(String memberId, String mobile, String name, String password, String nickname, String email,
-                  String region, Role role, AuthProvider authProvider, String refreshToken, Date tokenExpirationTime
+    public Member(Long id, String memberId, String mobile, String name, String password, String nickname, String email,
+                  String region, String profileUrl, Role role, AuthProvider authProvider, String refreshToken, Date tokenExpirationTime
                   ) {
+        this.id = id;
         this.memberId = memberId;
         this.mobile = mobile;
         this.name = name;
@@ -60,6 +72,7 @@ public class Member{
         this.nickname = nickname;
         this.email = email;
         this.region = region;
+        this.profileUrl =profileUrl;
         this.role = role;
         this.authProvider = authProvider;
         this.refreshToken = refreshToken;
@@ -80,6 +93,24 @@ public class Member{
 
     public void expireRefreshToken(Date now) {
         this.tokenExpirationTime = now;
+    }
+
+    public void updateRegionAndNickname(String region,String nickname){
+        this.region = region;
+        this.nickname = nickname;
+    }
+
+    public void updateProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
+    }
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+    public void updateRegion(String region){
+        this.region = region;
+    }
+    public void createVocaId(Long vocaId) {
+        this.vocaId = vocaId;
     }
 
 }

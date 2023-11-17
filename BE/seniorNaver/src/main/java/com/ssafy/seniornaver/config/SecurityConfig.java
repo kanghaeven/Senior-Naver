@@ -5,6 +5,7 @@ import com.ssafy.seniornaver.auth.jwt.JwtFilter;
 import com.ssafy.seniornaver.auth.jwt.JwtProvider;
 import com.ssafy.seniornaver.auth.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@Slf4j
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
@@ -29,6 +31,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        log.info("filterChain called");
         http
                 .httpBasic().disable()
                 .csrf().disable()
@@ -40,7 +43,7 @@ public class SecurityConfig {
                         "/swagger-ui.html", "/swagger-ui/**",
                         "/v3/api-docs", "/v3/api-docs/**",
                         "/swagger-resources", "/swagger-resources/**",
-                        "/webjars/**","/test/**").permitAll()
+                        "/webjars/**","/test/**", "/search/**", "/**/v1/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

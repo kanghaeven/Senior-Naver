@@ -53,21 +53,22 @@ public class NaverRequestServiceImpl implements RequestService {
         OAuthSignInResponse oAuthSignInResponse = OAuthSignInResponse.builder()
                 .authProvider(AuthProvider.NAVER)
                 .memberId(naverMemberInfo.getResponse().getId())
-                .nickname(naverMemberInfo.getResponse().getName())
+                .name(naverMemberInfo.getResponse().getName())
                 .email(naverMemberInfo.getResponse().getEmail())
                 .mobile(naverMemberInfo.getResponse().getMobile())
-                .accessToken(accessTokenDto.getToken())
-                .refreshToken(refreshTokenDto.getToken())
+                .accessToken(accessTokenDto.getAccessToken())
+                .refreshToken(refreshTokenDto.getAccessToken())
                 .refreshTokenExpirationTime(refreshTokenDto.getTokenExpirationTime())
                 .build();
 
         Member memberEntity;
-        if(!memberRepository.existsById(naverMemberInfo.getResponse().getId())){
+
+        if(!memberRepository.existsByMemberId(naverMemberInfo.getResponse().getId())){
             memberEntity = oAuthSignInResponse.toEntity();
         } else {
             memberEntity = memberRepository.findByMemberId(String.valueOf(naverMemberInfo.getResponse().getId()))
                     .orElseThrow(() -> new IllegalStateException("유저 아이디가 없습니다."));
-            memberEntity.updateRefreshToken(refreshTokenDto.getToken(), refreshTokenDto.getTokenExpirationTime());
+            memberEntity.updateRefreshToken(refreshTokenDto.getAccessToken(), refreshTokenDto.getTokenExpirationTime());
         }
         memberRepository.save(memberEntity);
         return oAuthSignInResponse;
@@ -125,4 +126,7 @@ public class NaverRequestServiceImpl implements RequestService {
                 .bodyToMono(TokenResponse.class)
                 .block();
     }
+
+
+
 }

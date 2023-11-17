@@ -14,9 +14,9 @@ public class OAuthSignInResponse {
     private AuthProvider authProvider;
 
     private String memberId;
-    private String mobile;
-    private String nickname;
+    private String name;
     private String email;
+    private String mobile;
     private String accessToken;
     private String refreshToken;
     private Date refreshTokenExpirationTime;
@@ -25,18 +25,18 @@ public class OAuthSignInResponse {
     public OAuthSignInResponse(
             AuthProvider authProvider
             ,String memberId
-            ,String mobile
-            ,String nickname
+            ,String name
             ,String email
+            ,String mobile
             ,String accessToken
             ,String refreshToken
             ,Date refreshTokenExpirationTime
     ){
         this.authProvider = authProvider;
         this.memberId = memberId;
-        this.mobile = mobile;
-        this.nickname = nickname;
+        this.name = name;
         this.email = email;
+        this.mobile = mobile;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.refreshTokenExpirationTime = refreshTokenExpirationTime;
@@ -48,10 +48,11 @@ public class OAuthSignInResponse {
         return Member.builder()
                 .memberId(memberId)
                 .authProvider(authProvider)
-                .nickname(nickname)
-                .password(password)
+                .name(name)
                 .email(email)
                 .mobile(mobile)
+                .password(password)
+                .profileUrl("https://d33nz7652hemr5.cloudfront.net/Profile/user-basic-profile.png")
                 .role(Role.USER)
                 .refreshToken(refreshToken)
                 .tokenExpirationTime(refreshTokenExpirationTime)
